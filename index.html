@@ -303,16 +303,6 @@ function checkAutoReset() {
   }
 }
 
-function manualReset() {
-  if (!confirm('Sei sicuro di voler resettare tutti i dati della settimana?')) return;
-  const state = getState();
-  state.votes = {};
-  state.resetAt = getNextFridayReset().getTime();
-  saveState(state);
-  renderAdmin();
-  showToast('✅ Reset completato', 'success');
-}
-
 // ─── Week dates ────────────────────────────────────────────────────
 function getWeekDates() {
   const today = new Date();
