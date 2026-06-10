@@ -260,7 +260,7 @@
 
 <div id="tab-vote" class="container">
   <div class="person-selector">
-    <h2>👤 Chi sei?</h2>
+    <h2>👤 Barra di Ricerca</h2>
     <div class="search-wrapper">
       <span class="search-icon">🔍</span>
       <input
@@ -280,7 +280,7 @@
   </div>
 
   <div class="days-card">
-    <h2>📆 Quali giorni verrai in ufficio?</h2>
+    <h2>📆 Seleziona i giorni in cui verrai in ufficio</h2>
     <div class="week-label" id="vote-week-label"></div>
     <div class="days-grid" id="days-grid"></div>
     <div id="already-voted-msg"></div>
@@ -519,7 +519,7 @@ function showAlreadyVoted(show) {
   const el = document.getElementById('already-voted-msg');
   if (show && selectedPerson) {
     const days = selectedDays.map(i => DAYS[i]).join(', ') || 'nessun giorno';
-    el.innerHTML = `<div class="already-voted">✅ Preferenza già salvata: <strong>${days}</strong>. Puoi aggiornare e risalvare.</div>`;
+    el.innerHTML = `<div class="already-voted">✅ Preferenza già salvata: <strong>${days}</strong>. Puoi aggiornare le date selezionando il tuo nome e salvando nuovamente le modifiche.</div>`;
   } else {
     el.innerHTML = '';
   }
