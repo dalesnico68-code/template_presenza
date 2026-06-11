@@ -536,14 +536,14 @@ async function renderAdmin() {
       tbody.innerHTML = `<tr><td colspan="6" class="no-data">Nessuna preferenza inserita.</td></tr>`;
       continue;
     }
-    tbody.innerHTML = PEOPLE.map(person => {
-      const vote = weekData[person];
-      if (!vote) return `<tr><td>${person}</td>${DAYS.map(()=>'<td style="color:#a0aec0">–</td>').join('')}</tr>`;
-      const cells = DAYS.map((_,i) =>
-        vote.includes(i) ? `<td><span class="dot"></span>✓</td>` : `<td style="color:#e2e8f0">✗</td>`
-      ).join('');
-      return `<tr><td><strong>${person}</strong></td>${cells}</tr>`;
-    }).join('');
+   tbody.innerHTML = PEOPLE.filter(person => weekData[person] && weekData[person].length >= 0)
+    .map(person => {
+    const vote = weekData[person];
+    const cells = DAYS.map((_,i) =>
+      vote.includes(i) ? `<td><span class="dot"></span>✓</td>` : `<td style="color:#e2e8f0">✗</td>`
+    ).join('');
+    return `<tr><td><strong>${person}</strong></td>${cells}</tr>`;
+  }).join('');
   }
 }
 
