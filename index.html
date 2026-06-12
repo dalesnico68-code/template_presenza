@@ -359,7 +359,8 @@ async function saveWeekData(offset, person, days) {
 function getAlertWindowDays() {
   const dow = new Date().getDay();
   if (dow >= 1 && dow <= 3) return 2;
-  if (dow === 4 || dow === 5) return 4;
+  if (dow === 4) return 4;
+  if (dow === 5) return 3;
   return dow === 6 ? 3 : 2;
 }
 
