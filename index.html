@@ -243,6 +243,18 @@
       <div class="days-grid" id="grid-week1"></div>
       <button class="save-btn" id="save-btn-week1" onclick="saveVote(1)" disabled>Salva preferenze settimana prossima</button>
     </div>
+
+   <!-- Settimana successiva (+2) -->
+<div class="days-card" id="card-week2">
+  <div class="days-card-header">
+    <h2 id="title-week2">Settimana successiva</h2>
+    <span class="week-badge next" id="badge-week2"></span>
+  </div>
+  <div class="week-range-sub" id="range-week2"></div>
+  <div id="voted-week2"></div>
+  <div class="days-grid" id="grid-week2"></div>
+  <button class="save-btn" id="save-btn-week2" onclick="saveVote(2)" disabled>Salva preferenze settimana successiva</button>
+</div>
   </div>
 </div>
 
@@ -270,6 +282,19 @@
       <tbody id="admin-detail-week1"></tbody></table>
     </div>
   </div>
+
+ <hr class="divider">
+<div class="admin-week-block">
+  <div class="admin-week-title">
+    📅 Settimana successiva <span class="week-badge next" id="admin-badge-week2"></span>
+  </div>
+  <div class="summary-grid" id="admin-summary-week2"></div>
+  <div class="detail-table">
+    <h3>Dettaglio per persona</h3>
+    <table><thead><tr><th>Persona</th><th>Lun</th><th>Mar</th><th>Mer</th><th>Gio</th><th>Ven</th></tr></thead>
+    <tbody id="admin-detail-week2"></tbody></table>
+  </div>
+</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -294,7 +319,7 @@ const PEOPLE = ["Alessandro Guida", "Antonio Fusco", "Benedetta Sorgentone", "Ca
 const DAYS   = ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì'];
 
 let selectedPerson = null;
-let selectedDays = [[], []];
+let selectedDays = [[], [], []];
 let highlightedIndex = -1;
 
 // ─── Helpers ──────────────────────────────────────────────────────────
@@ -369,7 +394,7 @@ async function checkMyPlaceAlert() {
   const now = new Date(); now.setHours(0,0,0,0);
   const windowDays = getAlertWindowDays();
   const alertDayNames = [];
-  for (let w = 0; w < 2; w++) {
+  for (let w = 0; w < 3; w++) {
     const weekData = await loadWeekData(w);
     const saved = weekData[selectedPerson] || [];
     const dates = getWeekDates(w);
@@ -434,7 +459,7 @@ async function selectPerson(name) {
 
 function clearPerson() {
   selectedPerson = null;
-  selectedDays = [[], []];
+  selectedDays = [[], [], []];
   document.getElementById('selected-badge-container').innerHTML = '';
   document.getElementById('search-input').value = '';
   hideBanner();
@@ -444,7 +469,7 @@ function clearPerson() {
 
 // ─── Vote page ────────────────────────────────────────────────────────
 async function loadPersonVotes() {
-  for (let w = 0; w < 2; w++) {
+  for (let w = 0; w < 3; w++) {
     const weekData = await loadWeekData(w);
     selectedDays[w] = [...(weekData[selectedPerson] || [])];
   }
@@ -452,7 +477,7 @@ async function loadPersonVotes() {
 }
 
 function renderBothWeeks() {
-  for (let w = 0; w < 2; w++) renderWeek(w);
+  for (let w = 0; w < 3; w++) renderWeek(w);
 }
 
 function renderWeek(w) {
@@ -460,7 +485,8 @@ function renderWeek(w) {
   const todayMidnight = new Date(); todayMidnight.setHours(0,0,0,0);
 
   document.getElementById(`range-week${w}`).textContent = `${fmt(dates[0])} – ${fmt(dates[4])}`;
-  document.getElementById(`badge-week${w}`).textContent = w === 0 ? '📅 Settimana corrente' : '📅 Settimana prossima';
+  const badgeLabels = ['📅 Settimana corrente', '📅 Settimana prossima', '📅 Settimana successiva'];
+  document.getElementById(`badge-week${w}`).textContent = badgeLabels[w];
 
   // Already voted msg
   const votedEl = document.getElementById(`voted-week${w}`);
@@ -497,7 +523,7 @@ function toggleDay(w, i) {
 }
 
 function updateSaveBtns() {
-  for (let w = 0; w < 2; w++) {
+  for (let w = 0; w < 3; w++) {
     document.getElementById(`save-btn-week${w}`).disabled = !selectedPerson;
   }
 }
@@ -508,12 +534,13 @@ async function saveVote(w) {
   await saveWeekData(w, selectedPerson, [...selectedDays[w]]);
   renderWeek(w);
   await checkMyPlaceAlert();
-  showToast(`✅ Preferenze ${w===0?'settimana corrente':'settimana prossima'} salvate!`, 'success');
+  const weekLabels = ['settimana corrente', 'settimana prossima', 'settimana successiva'];
+  showToast(`✅ Preferenze ${weekLabels[w]} salvate!`, 'success');
 }
 
 // ─── Admin ────────────────────────────────────────────────────────────
 async function renderAdmin() {
-  for (let w = 0; w < 2; w++) {
+  for (let w = 0; w < 3; w++) {
     const weekData = await loadWeekData(w);
     const dates = getWeekDates(w);
 
